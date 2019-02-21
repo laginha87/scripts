@@ -2,6 +2,14 @@ require 'io/console'
 
 option = ARGV[0]
 
+def open path
+    if([".pdf"].include?(File.extname(path)))
+        `open '#{path}'`
+    else
+        `code '#{path}'`
+    end
+end
+
 unless option
     `code ~/Dropbox/Cabinet`
     return
@@ -20,10 +28,15 @@ options = (Dir[File.expand_path("~/Dropbox/Cabinet/**/*")] + Dir[File.expand_pat
         end
     end
 
-options = options[:full].nil? ? options[:partial] : options[:full]
+options = (options[:full].nil? ? options[:partial] : options[:full])
+
+unless options
+    puts "#{option} Didn't match anything"
+    return
+end
 
 if options.length == 1
-    `code #{options[0]}`
+    open(options[0])
     return
 end
 
@@ -32,9 +45,13 @@ options.each_with_index do |option, index|
 end
 
 answer = STDIN.getch
-if(answer.to_i.to_c != answer || !options[answer.to_i])
+
+
+if((answer.to_i.to_s == answer) && options[answer.to_i])
+    open(options[answer.to_i])
+else
     print("Wrong Option")
-    return
 end
 
-`code #{options[answer.to_i]}`
+
+
