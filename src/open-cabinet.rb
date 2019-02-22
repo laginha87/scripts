@@ -12,7 +12,7 @@ end
 
 unless option
     `code ~/Dropbox/Cabinet`
-    return
+    exit
 end
 
 options = (Dir[File.expand_path("~/Dropbox/Cabinet/**/*")] + Dir[File.expand_path("~/Dropbox/Cabinet/*")])
@@ -32,12 +32,12 @@ options = (options[:full].nil? ? options[:partial] : options[:full])
 
 unless options
     puts "#{option} Didn't match anything"
-    return
+    exit
 end
 
 if options.length == 1
     open(options[0])
-    return
+    exit
 end
 
 options.each_with_index do |option, index|
