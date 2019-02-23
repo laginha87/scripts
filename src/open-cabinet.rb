@@ -23,12 +23,15 @@ options = (Dir[File.expand_path("~/Dropbox/Cabinet/**/*")] + Dir[File.expand_pat
             :full
         elsif(name.start_with?(option.downcase))
             :partial
+        elsif(name =~ /.*#{option}.*/)
+            :fuzzy
         else
             :miss
         end
     end
 
-options = (options[:full].nil? ? options[:partial] : options[:full])
+
+options = %i(full partial fuzzy).map{|e| options[e]}.compact.first
 
 unless options
     puts "#{option} Didn't match anything"
